@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<title>Chat | Altchat</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto Mono', monospace;
+    background-color: #000;
+    color: #00ff00;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background-color: rgba(0,0,0,0.8);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 15px #00ff00aa;
+  }
+  header img {
+    height: 79px;
+    user-select: none;
+  }
+  header a {
+    background-color: #00ff00;
+    color: #000;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+  }
+  header a:hover {
+    background-color: #66ff66;
+  }
+  #main-content {
+    flex: 1;
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+  }
+  #chatBox {
+    flex: 3;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 15px;
+    border-radius: 12px;
+    overflow-y: auto;
+    max-height: calc(100vh - 160px);
+  }
+  #usersList {
+    flex: 1;
+    background-color: rgba(0,0,0,0.75);
+    padding: 15px;
+    border-radius: 12px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+  }
+  .chat-message {
+    margin-bottom: 8px;
+    word-wrap: break-word;
+  }
+  .chat-message .username {
+    font-weight: bold;
+  }
+  .typing {
+    font-style: italic;
+    color: #66ff66;
+    height: 20px;
+    margin-top: 5px;
+    padding-left: 20px;
+  }
+  form#messageForm {
+    display: flex;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.7);
+    border-top: 1px solid #00ff00;
+  }
+  form#messageForm input[type="text"] {
+    flex: 1;
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 12px;
+    color: #00ff00;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
+  }
+  form#messageForm input[type="text"]:focus {
+    outline: none;
+    border-color: #66ff66;
+  }
+  form#messageForm button {
+    background-color: #00ff00;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin-left: 10px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  form#messageForm button:hover {
+    background-color: #66ff66;
+  }
+  #usersList h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #00ff00;
+    padding-bottom: 5px;
+  }
+  #usersList ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  #usersList ul li {
+    margin-bottom: 6px;
+    color: #00ff00;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.gif') }}" alt="Altchat Logo" />
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </header>
+  <div id="main-content">
+    <main id="chatBox">
+      {% if messages %}
+        {% for msg in messages %}
+          {% set parts = msg.split(': ', 1) %}
+          {% if parts|length == 2 %}
+            {# Username parsen, z.B. aus "[18.06.2025 15:00:00] username" nur username holen #}
+            {% set user = parts[0].split(']')[-1].strip() %}
+            {% set message = parts[1] %}
+            {% if user == 'aleajoleen07' %}
+              {% set color = '#ff69b4' %}
+            {% elif user == 'mrgloeckchen' %}
+              {% set color = 'red' %}
+            {% else %}
+              {% set color = '#00ff00' %}
+            {% endif %}
+            <div class="chat-message">
+              <span class="username" style="color: {{ color }}">{{ user }}</span>: {{ message }}
+            </div>
+          {% else %}
+            <div class="chat-message">{{ msg }}</div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="chat-message">Keine Nachrichten bisher.</div>
+      {% endif %}
+    </main>
+    <aside id="usersList">
+      <h3>Online Nutzer</h3>
+      <ul id="onlineUsers"></ul>
+    </aside>
+  </div>
+
+  <div class="typing" id="typingIndicator"></div>
+
+  <form id="messageForm">
+    <input autocomplete="off" autofocus placeholder="Deine Nachricht..." /><button>Senden</button>
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+  <script>
+    const socket = io();
+
+    const username = "{{ username }}";
+    const chatBox = document.getElementById('chatBox');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const messageForm = document.getElementById('messageForm');
+    const input = messageForm.querySelector('input');
+    const onlineUsersList = document.getElementById('onlineUsers');
+
+    socket.emit('join', { username });
+
+    socket.on('message', (data) => {
+      console.log('Neue Nachricht:', data);
+      const msgElement = document.createElement('div');
+      const userColor =
+        data.username === "aleajoleen07" ? "#ff69b4" :
+        data.username === "mrgloeckchen" ? "red" :
+        data.color || "#00ff00";
+
+      msgElement.innerHTML = `
+        <div class="chat-message">
+          <strong class="username" style="color: ${userColor}">${data.username}</strong>
+          <small>[${data.timestamp}]</small>: ${data.message}
+        </div>
+      `;
+      chatBox.appendChild(msgElement);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    socket.on('user_update', users => {
+      onlineUsersList.innerHTML = '';
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = user;
+        if(user === username) li.style.fontWeight = 'bold';
+        onlineUsersList.appendChild(li);
+      });
+    });
+
+    socket.on('typing', data => {
+      typingIndicator.textContent = data.username + ' tippt...';
+      setTimeout(() => {
+        typingIndicator.textContent = '';
+      }, 2000);
+    });
+
+    messageForm.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!input.value.trim()) return;
+      socket.emit('message', { message: input.value });
+      input.value = '';
+    });
+
+    input.addEventListener('input', () => {
+      socket.emit('typing', { username });
+    });
+
+    window.addEventListener('beforeunload', () => {
+      socket.emit('leave', { username });
+    });
+  </script>
+</body>
+</html>
