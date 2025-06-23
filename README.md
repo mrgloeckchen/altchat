@@ -68,7 +68,17 @@ The WhatsApp bot is not included in this repository. You'll need to write and ho
 
 ## 📸 Screenshots
 
-> *(Optional: add screenshots showing the darkmode UI, chat layout, color system, etc.)*
+### 💬 Chat View
+![Chat](screenshots/Chat.png)
+
+### 🔐 Login Page
+![Login](screenshots/Login.png)
+
+### 📝 Register Page
+![Register](screenshots/register.png)
+
+### 🔚 Logout Confirmation
+![Logout](screenshots/logout.png)
 
 ---
 
