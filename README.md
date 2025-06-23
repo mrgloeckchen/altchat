@@ -54,7 +54,7 @@ This project originally included a WhatsApp notification system for offline user
 
 If you want to build your own bot:
 
-> ⚙️ You need to create it manually using [Baileys](https://github.com/adiwajshing/Baileys), a Node.js WhatsApp Web API.
+> ⚙️ You need to create it manually using [Baileys](https://baileys.wiki/docs/intro/), a Node.js WhatsApp Web API.
 
 Basic idea:
 - Local server receives a POST request when a user goes offline
