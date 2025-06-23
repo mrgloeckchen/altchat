@@ -133,7 +133,7 @@ Now visit:
 
 ## 📷 Screenshot
 
-![WhatsApp Notification Preview](notify.png)
+![WhatsApp Notification Preview](/altchat/screenshots)
 
 ---
 
