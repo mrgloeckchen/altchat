@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <title>Altchat Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: #eee;
+      font-family: 'Roboto Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
+    }
+    header {
+      background-color: rgba(0,0,0,0.8);
+      padding: 15px 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 0 15px #00ff00aa;
+      user-select: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    header img {
+      height: 79px;
+    }
+    main {
+      margin-top: 110px;
+      width: 320px;
+      background: #222;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 0 15px #00ff0044;
+    }
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #0f0;
+      text-shadow: 0 0 5px #0f0;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #333;
+      color: #eee;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #0f0;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: #111;
+      box-shadow: 0 0 8px #0f0;
+    }
+    input[type="submit"]:hover {
+      background-color: #0c0;
+      box-shadow: 0 0 15px #0c0;
+    }
+    .flash {
+      color: #f44;
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+      text-shadow: 0 0 5px #f44;
+    }
+    .register-link {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #0f0;
+      text-shadow: 0 0 4px #0f0;
+    }
+    .register-link a {
+      color: #0f0;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.gif') }}" alt="Altchat Logo" />
+  </header>
+
+  <main>
+    <h1>Altchat Login</h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+    <form method="POST" action="{{ url_for('login') }}">
+      <input type="text" name="username" placeholder="Benutzername" required autofocus />
+      <input type="password" name="password" placeholder="Passwort" required />
+      <input type="submit" value="Login" />
+    </form>
+    <div class="register-link">
+      Kein Account? <a href="{{ url_for('register') }}">Registrieren</a>
+    </div>
+  </main>
+</body>
+</html>
