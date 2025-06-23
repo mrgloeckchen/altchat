@@ -1,4 +1,4 @@
-<h1 align="center">🟢 ALTCHAT v1.0.0-beta</h1>
+<h1 align="center">🟢 ALTCHAT v1.0.0-Final</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/status-beta-green?style=flat-square" />
   <img src="https://img.shields.io/badge/built_with-Flask-blue?style=flat-square" />
