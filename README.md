@@ -13,7 +13,7 @@
 
 - 🔐 Login & registration with manual admin approval
 - ✍️ Real-time chat with custom **Alt-Language conversion**
-- 🟢 Online/offline user list with unique name colors
+- 🟢 Online user list with unique name colors
 - 💾 Message saving with timestamp and date
 - 🎨 Darkmode UI (Roboto Mono, neon green style)
 - ☠️ Full cache-busting for static assets
