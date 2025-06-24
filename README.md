@@ -6,8 +6,6 @@ AltChat is a secure, private, terminal-style web chat system designed for closed
 
 This version includes a WhatsApp Notification Bot to alert offline users when they receive a new message.
 
-![Notification Preview](altchat/screenshots/notify.jpg)
-
 ---
 
 ## 📁 Project Structure
@@ -132,8 +130,12 @@ Now visit:
 ---
 
 ## 📷 Screenshot
-
+###Whatsapp Notification:
 ![WhatsApp Notification Preview](altchat/screenshots/notify.jpg)
+
+###Login Page:
+![Login](altchat/screenshots/login.png)
+
 
 ---
 
