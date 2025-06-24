@@ -130,11 +130,10 @@ Now visit:
 ---
 
 ## 📷 Screenshot
-###Whatsapp Notification:
+
 ![WhatsApp Notification Preview](altchat/screenshots/notify.jpg)
 
-###Login Page:
-![Login](altchat/screenshots/login.png)
+![Login](altchat/screenshots/Login.png)
 
 
 ---
